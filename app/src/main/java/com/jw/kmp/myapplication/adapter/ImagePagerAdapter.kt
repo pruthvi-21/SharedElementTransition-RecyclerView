@@ -13,29 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.jw.kmp.myapplication.adapter
 
-package com.jw.kmp.myapplication.adapter;
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentStatePagerAdapter
+import com.jw.kmp.myapplication.adapter.ImageData.IMAGE_DRAWABLES
+import com.jw.kmp.myapplication.fragment.ImageFragment.Companion.newInstance
 
-import static com.jw.kmp.myapplication.adapter.ImageData.IMAGE_DRAWABLES;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-
-import com.jw.kmp.myapplication.fragment.ImageFragment;
-
-public class ImagePagerAdapter extends FragmentStatePagerAdapter {
-
-    public ImagePagerAdapter(Fragment fragment) {
-        super(fragment.getChildFragmentManager());
+class ImagePagerAdapter(fragment: Fragment) :
+    FragmentStatePagerAdapter(fragment.childFragmentManager) {
+    override fun getCount(): Int {
+        return IMAGE_DRAWABLES.size
     }
 
-    @Override
-    public int getCount() {
-        return IMAGE_DRAWABLES.length;
-    }
-
-    @Override
-    public Fragment getItem(int position) {
-        return ImageFragment.newInstance(IMAGE_DRAWABLES[position]);
+    override fun getItem(position: Int): Fragment {
+        return newInstance(IMAGE_DRAWABLES.get(position))
     }
 }

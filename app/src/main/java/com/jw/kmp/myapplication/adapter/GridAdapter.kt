@@ -13,191 +13,166 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.jw.kmp.myapplication.adapter
 
-package com.jw.kmp.myapplication.adapter;
-
-import static com.jw.kmp.myapplication.adapter.ImageData.IMAGE_DRAWABLES;
-
-import android.graphics.drawable.Drawable;
-import android.transition.TransitionSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.DataSource;
-import com.bumptech.glide.load.engine.GlideException;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.jw.kmp.myapplication.MainActivity;
-import com.jw.kmp.myapplication.R;
-import com.jw.kmp.myapplication.fragment.ImagePagerFragment;
-
-import java.util.concurrent.atomic.AtomicBoolean;
+import android.graphics.drawable.Drawable
+import android.transition.TransitionSet
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
+import com.jw.kmp.myapplication.MainActivity
+import com.jw.kmp.myapplication.R
+import com.jw.kmp.myapplication.adapter.GridAdapter.ImageViewHolder
+import com.jw.kmp.myapplication.adapter.ImageData.IMAGE_DRAWABLES
+import com.jw.kmp.myapplication.fragment.ImagePagerFragment
+import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * A fragment for displaying a grid of images.
  */
-public class GridAdapter extends RecyclerView.Adapter<GridAdapter.ImageViewHolder> {
-
+class GridAdapter(fragment: Fragment) : RecyclerView.Adapter<ImageViewHolder>() {
     /**
      * A listener that is attached to all ViewHolders to handle image loading events and clicks.
      */
-    private interface ViewHolderListener {
+    interface ViewHolderListener {
+        fun onLoadCompleted(view: ImageView?, adapterPosition: Int)
 
-        void onLoadCompleted(ImageView view, int adapterPosition);
-
-        void onItemClicked(View view, int adapterPosition);
+        fun onItemClicked(view: View, adapterPosition: Int)
     }
 
-    private final RequestManager requestManager;
-    private final ViewHolderListener viewHolderListener;
+    private val requestManager = Glide.with(fragment)
+    private val viewHolderListener: ViewHolderListener = ViewHolderListenerImpl(fragment)
 
-    /**
-     * Constructs a new grid adapter for the given {@link Fragment}.
-     */
-    public GridAdapter(Fragment fragment) {
-        this.requestManager = Glide.with(fragment);
-        this.viewHolderListener = new ViewHolderListenerImpl(fragment);
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.image_card, parent, false)
+        return ImageViewHolder(view, requestManager, viewHolderListener)
     }
 
-    @Override
-    public ImageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.image_card, parent, false);
-        return new ImageViewHolder(view, requestManager, viewHolderListener);
+    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
+        holder.onBind()
     }
 
-    @Override
-    public void onBindViewHolder(ImageViewHolder holder, int position) {
-        holder.onBind();
-    }
-
-    @Override
-    public int getItemCount() {
-        return IMAGE_DRAWABLES.length;
+    override fun getItemCount(): Int {
+        return IMAGE_DRAWABLES.size
     }
 
 
     /**
-     * Default {@link ViewHolderListener} implementation.
+     * Default [ViewHolderListener] implementation.
      */
-    private static class ViewHolderListenerImpl implements ViewHolderListener {
+    private class ViewHolderListenerImpl(private val fragment: Fragment) :
+        ViewHolderListener {
+        private val enterTransitionStarted =
+            AtomicBoolean()
 
-        private Fragment fragment;
-        private AtomicBoolean enterTransitionStarted;
-
-        ViewHolderListenerImpl(Fragment fragment) {
-            this.fragment = fragment;
-            this.enterTransitionStarted = new AtomicBoolean();
-        }
-
-        @Override
-        public void onLoadCompleted(ImageView view, int position) {
+        override fun onLoadCompleted(view: ImageView?, position: Int) {
             // Call startPostponedEnterTransition only when the 'selected' image loading is completed.
             if (MainActivity.currentPosition != position) {
-                return;
+                return
             }
             if (enterTransitionStarted.getAndSet(true)) {
-                return;
+                return
             }
-            fragment.startPostponedEnterTransition();
+            fragment.startPostponedEnterTransition()
         }
 
         /**
-         * Handles a view click by setting the current position to the given {@code position} and
-         * starting a {@link  ImagePagerFragment} which displays the image at the position.
+         * Handles a view click by setting the current position to the given `position` and
+         * starting a [ImagePagerFragment] which displays the image at the position.
          *
-         * @param view     the clicked {@link ImageView} (the shared element view will be re-mapped at the
-         *                 GridFragment's SharedElementCallback)
+         * @param view     the clicked [ImageView] (the shared element view will be re-mapped at the
+         * GridFragment's SharedElementCallback)
          * @param position the selected view position
          */
-        @Override
-        public void onItemClicked(View view, int position) {
+        override fun onItemClicked(view: View, position: Int) {
             // Update the position.
-            MainActivity.currentPosition = position;
+            MainActivity.currentPosition = position
 
             // Exclude the clicked card from the exit transition (e.g. the card will disappear immediately
             // instead of fading out with the rest to prevent an overlapping animation of fade and move).
-            ((TransitionSet) fragment.getExitTransition()).excludeTarget(view, true);
+            (fragment.exitTransition as TransitionSet).excludeTarget(view, true)
 
-            ImageView transitioningView = view.findViewById(R.id.card_image);
-            fragment.getFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true) // Optimize for shared element transition
-                    .addSharedElement(transitioningView, transitioningView.getTransitionName())
-                    .replace(R.id.fragment_container, new ImagePagerFragment(), ImagePagerFragment.class
-                            .getSimpleName())
-                    .addToBackStack(null)
-                    .commit();
+            val transitioningView = view.findViewById<ImageView>(R.id.card_image)
+            fragment.fragmentManager
+                ?.beginTransaction()
+                ?.setReorderingAllowed(true) // Optimize for shared element transition
+                ?.addSharedElement(transitioningView, transitioningView.transitionName)
+                ?.replace(
+                    R.id.fragment_container, ImagePagerFragment(), ImagePagerFragment::class.java
+                        .simpleName
+                )
+                ?.addToBackStack(null)
+                ?.commit()
         }
     }
 
     /**
      * ViewHolder for the grid's images.
      */
-    static class ImageViewHolder extends RecyclerView.ViewHolder implements
-            View.OnClickListener {
+    class ImageViewHolder(
+        itemView: View, private val requestManager: RequestManager,
+        private val viewHolderListener: ViewHolderListener,
+    ) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        private val image: ImageView = itemView.findViewById(R.id.card_image)
 
-        private final ImageView image;
-        private final RequestManager requestManager;
-        private final ViewHolderListener viewHolderListener;
-
-        ImageViewHolder(View itemView, RequestManager requestManager,
-                        ViewHolderListener viewHolderListener) {
-            super(itemView);
-            this.image = itemView.findViewById(R.id.card_image);
-            this.requestManager = requestManager;
-            this.viewHolderListener = viewHolderListener;
-            itemView.findViewById(R.id.card_view).setOnClickListener(this);
+        init {
+            itemView.findViewById<View>(R.id.card_view).setOnClickListener(this)
         }
 
         /**
          * Binds this view holder to the given adapter position.
-         * <p>
+         *
+         *
          * The binding will load the image into the image view, as well as set its transition name for
          * later.
          */
-        void onBind() {
-            int adapterPosition = getAdapterPosition();
-            setImage(adapterPosition);
+        fun onBind() {
+            val adapterPosition = adapterPosition
+            setImage(adapterPosition)
             // Set the string value of the image resource as the unique transition name for the view.
-            image.setTransitionName(String.valueOf(IMAGE_DRAWABLES[adapterPosition]));
+            image.transitionName = IMAGE_DRAWABLES.get(adapterPosition).toString()
         }
 
-        void setImage(final int adapterPosition) {
+        fun setImage(adapterPosition: Int) {
             // Load the image with Glide to prevent OOM error when the image drawables are very large.
             requestManager
-                    .load(IMAGE_DRAWABLES[adapterPosition])
-                    .listener(new RequestListener<Drawable>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model,
-                                                    Target<Drawable> target, boolean isFirstResource) {
-                            viewHolderListener.onLoadCompleted(image, adapterPosition);
-                            return false;
-                        }
+                .load(IMAGE_DRAWABLES.get(adapterPosition))
+                .listener(object : RequestListener<Drawable?> {
+                    override fun onLoadFailed(
+                        e: GlideException?, model: Any?,
+                        target: Target<Drawable?>, isFirstResource: Boolean,
+                    ): Boolean {
+                        viewHolderListener.onLoadCompleted(image, adapterPosition)
+                        return false
+                    }
 
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable>
-                                target, DataSource dataSource, boolean isFirstResource) {
-                            viewHolderListener.onLoadCompleted(image, adapterPosition);
-                            return false;
-                        }
-                    })
-                    .into(image);
+                    override fun onResourceReady(
+                        resource: Drawable,
+                        model: Any,
+                        target: Target<Drawable?>,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean,
+                    ): Boolean {
+                        viewHolderListener.onLoadCompleted(image, adapterPosition)
+                        return false
+                    }
+                })
+                .into(image)
         }
 
-        @Override
-        public void onClick(View view) {
+        override fun onClick(view: View) {
             // Let the listener start the ImagePagerFragment.
-            viewHolderListener.onItemClicked(view, getAdapterPosition());
+            viewHolderListener.onItemClicked(view, adapterPosition)
         }
     }
-
 }
