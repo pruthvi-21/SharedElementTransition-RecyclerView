@@ -22,6 +22,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
@@ -39,7 +41,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 /**
  * A fragment for displaying a grid of images.
  */
-class GridAdapter(fragment: Fragment) : RecyclerView.Adapter<ImageViewHolder>() {
+class GridAdapter(
+    fragment: Fragment,
+    navController: NavController,
+) : RecyclerView.Adapter<ImageViewHolder>() {
     /**
      * A listener that is attached to all ViewHolders to handle image loading events and clicks.
      */
@@ -50,7 +55,8 @@ class GridAdapter(fragment: Fragment) : RecyclerView.Adapter<ImageViewHolder>() 
     }
 
     private val requestManager = Glide.with(fragment)
-    private val viewHolderListener: ViewHolderListener = ViewHolderListenerImpl(fragment)
+    private val viewHolderListener: ViewHolderListener =
+        ViewHolderListenerImpl(fragment, navController)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -70,7 +76,10 @@ class GridAdapter(fragment: Fragment) : RecyclerView.Adapter<ImageViewHolder>() 
     /**
      * Default [ViewHolderListener] implementation.
      */
-    private class ViewHolderListenerImpl(private val fragment: Fragment) :
+    private class ViewHolderListenerImpl(
+        private val fragment: Fragment,
+        val navController: NavController,
+    ) :
         ViewHolderListener {
         private val enterTransitionStarted =
             AtomicBoolean()
@@ -103,16 +112,13 @@ class GridAdapter(fragment: Fragment) : RecyclerView.Adapter<ImageViewHolder>() 
             (fragment.exitTransition as TransitionSet).excludeTarget(view, true)
 
             val transitioningView = view.findViewById<ImageView>(R.id.card_image)
-            fragment.fragmentManager
-                ?.beginTransaction()
-                ?.setReorderingAllowed(true) // Optimize for shared element transition
-                ?.addSharedElement(transitioningView, transitioningView.transitionName)
-                ?.replace(
-                    R.id.fragment_container, ImagePagerFragment(), ImagePagerFragment::class.java
-                        .simpleName
-                )
-                ?.addToBackStack(null)
-                ?.commit()
+            val extras =
+                FragmentNavigatorExtras(transitioningView to transitioningView.transitionName)
+
+            navController.navigate(
+                R.id.action_grid_fragment_to_pager_fragment,
+                null, null, extras
+            )
         }
     }
 

@@ -23,6 +23,8 @@ import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
 import androidx.core.app.SharedElementCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jw.kmp.myapplication.MainActivity
 import com.jw.kmp.myapplication.R
@@ -34,12 +36,16 @@ import com.jw.kmp.myapplication.adapter.GridAdapter
 class GridFragment : Fragment() {
     private var recyclerView: RecyclerView? = null
 
+    private val navController: NavController by lazy {
+        findNavController()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         recyclerView = inflater.inflate(R.layout.fragment_grid, container, false) as RecyclerView
-        recyclerView!!.adapter = GridAdapter(this)
+        recyclerView!!.adapter = GridAdapter(this, navController)
 
         prepareTransitions()
         postponeEnterTransition()

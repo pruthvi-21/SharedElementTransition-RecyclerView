@@ -31,11 +31,6 @@ class MainActivity : AppCompatActivity() {
             // Return here to prevent adding additional GridFragments when changing orientation.
             return
         }
-        val fragmentManager = supportFragmentManager
-        fragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, GridFragment(), GridFragment::class.java.simpleName)
-            .commit()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
