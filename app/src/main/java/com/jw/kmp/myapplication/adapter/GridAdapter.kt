@@ -153,6 +153,7 @@ class GridAdapter(
             // Load the image with Glide to prevent OOM error when the image drawables are very large.
             requestManager
                 .load(IMAGE_DRAWABLES.get(adapterPosition))
+                .override(400, 400)
                 .listener(object : RequestListener<Drawable?> {
                     override fun onLoadFailed(
                         e: GlideException?, model: Any?,
