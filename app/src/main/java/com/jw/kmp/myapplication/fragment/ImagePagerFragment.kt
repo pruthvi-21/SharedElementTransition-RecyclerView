@@ -9,9 +9,12 @@ import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
 import com.jw.kmp.myapplication.MainActivity
 import com.jw.kmp.myapplication.adapter.ImagePagerAdapter
 import com.jw.kmp.myapplication.databinding.FragmentPagerBinding
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ImagePagerFragment : Fragment() {
     private lateinit var binding: FragmentPagerBinding
+
+    val enterTransitionStarted = AtomicBoolean(false)
 
     override fun onCreateView(
         inflater: LayoutInflater,

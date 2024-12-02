@@ -21,6 +21,6 @@ internal object ImageData {
         R.drawable.hoverfly_546692,
         R.drawable.insect_278083,
         R.drawable.morpho_43483,
-        R.drawable.nature_95365
+        R.drawable.nature_95366
     )
 }
