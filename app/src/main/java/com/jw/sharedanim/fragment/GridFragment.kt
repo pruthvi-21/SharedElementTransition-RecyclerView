@@ -1,4 +1,4 @@
-package com.jw.kmp.myapplication.fragment
+package com.jw.sharedanim.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,9 +7,9 @@ import android.view.View.OnLayoutChangeListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.jw.kmp.myapplication.MainActivity
-import com.jw.kmp.myapplication.adapter.GridAdapter
-import com.jw.kmp.myapplication.databinding.FragmentGridBinding
+import com.jw.sharedanim.MainActivity
+import com.jw.sharedanim.adapter.GridAdapter
+import com.jw.sharedanim.databinding.FragmentGridBinding
 
 class GridFragment : Fragment() {
     private lateinit var binding: FragmentGridBinding

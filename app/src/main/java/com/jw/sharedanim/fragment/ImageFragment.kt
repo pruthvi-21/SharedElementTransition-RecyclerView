@@ -1,4 +1,4 @@
-package com.jw.kmp.myapplication.fragment
+package com.jw.sharedanim.fragment
 
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
@@ -17,7 +17,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.jw.kmp.myapplication.databinding.FragmentImageBinding
+import com.jw.sharedanim.databinding.FragmentImageBinding
 
 class ImageFragment : Fragment() {
     private lateinit var binding: FragmentImageBinding

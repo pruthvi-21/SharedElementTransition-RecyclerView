@@ -1,11 +1,11 @@
-package com.jw.kmp.myapplication
+package com.jw.sharedanim
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import com.jw.kmp.myapplication.databinding.ActivityMainBinding
+import com.jw.sharedanim.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }

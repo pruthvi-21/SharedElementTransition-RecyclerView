@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.jw.kmp.myapplication"
+    namespace = "com.jw.sharedanim"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.jw.kmp.myapplication"
+        applicationId = "com.jw.sharedanim"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

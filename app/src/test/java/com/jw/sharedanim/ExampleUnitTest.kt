@@ -1,4 +1,4 @@
-package com.jw.kmp.myapplication
+package com.jw.sharedanim
 
 import org.junit.Test
 

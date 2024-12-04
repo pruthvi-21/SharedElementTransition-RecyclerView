@@ -1,4 +1,4 @@
-package com.jw.kmp.myapplication.fragment
+package com.jw.sharedanim.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager.SimpleOnPageChangeListener
-import com.jw.kmp.myapplication.MainActivity
-import com.jw.kmp.myapplication.adapter.ImagePagerAdapter
-import com.jw.kmp.myapplication.databinding.FragmentPagerBinding
+import com.jw.sharedanim.MainActivity
+import com.jw.sharedanim.adapter.ImagePagerAdapter
+import com.jw.sharedanim.databinding.FragmentPagerBinding
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ImagePagerFragment : Fragment() {

@@ -1,7 +1,7 @@
-package com.jw.kmp.myapplication.adapter
+package com.jw.sharedanim.adapter
 
 import androidx.annotation.DrawableRes
-import com.jw.kmp.myapplication.R
+import com.jw.sharedanim.R
 
 internal object ImageData {
     // Image assets (free for commercial use, no attribution required, from pixabay.com)

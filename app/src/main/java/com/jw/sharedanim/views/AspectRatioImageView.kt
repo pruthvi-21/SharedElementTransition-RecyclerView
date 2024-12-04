@@ -1,4 +1,4 @@
-package com.jw.kmp.myapplication.views
+package com.jw.sharedanim.views
 
 import android.content.Context
 import android.graphics.drawable.Drawable

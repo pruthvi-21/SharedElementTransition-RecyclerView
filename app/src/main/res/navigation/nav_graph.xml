@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/grid_fragment"
-        android:name="com.jw.kmp.myapplication.fragment.GridFragment"
+        android:name="com.jw.sharedanim.fragment.GridFragment"
         tools:layout="@layout/fragment_grid" >
         <action
             android:id="@+id/action_grid_fragment_to_pager_fragment"
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/pager_fragment"
-        android:name="com.jw.kmp.myapplication.fragment.ImagePagerFragment"
+        android:name="com.jw.sharedanim.fragment.ImagePagerFragment"
         tools:layout="@layout/fragment_pager" />
 
 <!--    <fragment-->

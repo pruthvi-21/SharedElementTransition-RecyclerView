@@ -1,9 +1,9 @@
-package com.jw.kmp.myapplication.adapter
+package com.jw.sharedanim.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.jw.kmp.myapplication.adapter.ImageData.IMAGE_DRAWABLES
-import com.jw.kmp.myapplication.fragment.ImageFragment.Companion.newInstance
+import com.jw.sharedanim.adapter.ImageData.IMAGE_DRAWABLES
+import com.jw.sharedanim.fragment.ImageFragment.Companion.newInstance
 
 class ImagePagerAdapter(fragment: Fragment) :
     FragmentStatePagerAdapter(fragment.childFragmentManager) {

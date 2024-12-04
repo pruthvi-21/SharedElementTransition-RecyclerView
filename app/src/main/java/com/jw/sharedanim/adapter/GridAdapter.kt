@@ -1,4 +1,4 @@
-package com.jw.kmp.myapplication.adapter
+package com.jw.sharedanim.adapter
 
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
@@ -15,11 +15,11 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.jw.kmp.myapplication.MainActivity
-import com.jw.kmp.myapplication.R
-import com.jw.kmp.myapplication.adapter.GridAdapter.ImageViewHolder
-import com.jw.kmp.myapplication.adapter.ImageData.IMAGE_DRAWABLES
-import com.jw.kmp.myapplication.databinding.ImageCardBinding
+import com.jw.sharedanim.MainActivity
+import com.jw.sharedanim.R
+import com.jw.sharedanim.adapter.GridAdapter.ImageViewHolder
+import com.jw.sharedanim.adapter.ImageData.IMAGE_DRAWABLES
+import com.jw.sharedanim.databinding.ImageCardBinding
 import java.util.concurrent.atomic.AtomicBoolean
 
 class GridAdapter(
